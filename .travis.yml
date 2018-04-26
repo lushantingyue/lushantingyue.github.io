@@ -1,24 +1,29 @@
 language: node_js
 node_js: stable
+
 branches:
   only:
   - source
+
 cache:
   directories:
   - node_modules
+
 before_install:
-- openssl aes-256-cbc -K $encrypted_2eb6f2114b4c_key -iv $encrypted_2eb6f2114b4c_iv
-  -in ./.travis/id_rsa.enc -out ~/.ssh/id_rsa -d
+- openssl aes-256-cbc -K $encrypted_f759a37ba6e3_key -iv $encrypted_f759a37ba6e3_iv -in ./.travis/id_rsa.enc -out ~/.ssh/id_rsa -d
 - chmod 600 ~/.ssh/id_rsa
 - eval $(ssh-agent)
 - ssh-add ~/.ssh/id_rsa
 - cp .travis/ssh_config ~/.ssh/config
 - npm install -g hexo-cli
 - git clone -b mod https://github.com/lushantingyue/lushantingyue.github.io.git themes/next
+
 install:
 - npm install
+
 script:
 - hexo generate
+
 after_success:
 - git config --global user.name "lushantingyue"
 - git config --global user.email "lushantingyue@gmail.com"
