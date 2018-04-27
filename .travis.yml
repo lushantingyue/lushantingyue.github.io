@@ -30,7 +30,7 @@ before_script:
 - eval $(ssh-agent)
 - ssh-add ~/.ssh/id_rsa
 - cp .travis/ssh_config ~/.ssh/config
-- sed -i'' "/^ *repo/s~github\.com~${githubToken}@github.com~" _config.yml
+- sed -i "s/gh_token/${GH_TOKEN}/g" ./_config.yml
 
 script:
 - hexo clean
