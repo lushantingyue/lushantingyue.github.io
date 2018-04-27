@@ -14,6 +14,7 @@ cache:
   - node_modules
 
 before_install:
+- npm install -g gulp
 - npm install -g hexo
 - npm install -g hexo-cli
 
@@ -34,9 +35,10 @@ before_script:
 script:
 - hexo clean
 - hexo generate && gulp
+- hexo deploy
 
 after_success:
-- hexo deploy
+- echo "hexo deploy OK!"
 
 # 邮件通知 (email, IRC, campfire etc)
 # please update this section to your needs!
