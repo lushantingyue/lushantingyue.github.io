@@ -23,7 +23,7 @@ install:
 
 before_script:
 - export TZ='Asia/Shanghai' # 更改时区
-- echo "192.30.253.112  github.com" >> /etc/hosts
+- sudo chmod 777 /etc/hosts && echo "192.30.253.112  github.com" >> /etc/hosts
 - git config --global user.name "lushantingyue"
 - git config --global user.email "lushantingyue@gmail.com"
 - openssl aes-256-cbc -K $encrypted_f759a37ba6e3_key -iv $encrypted_f759a37ba6e3_iv -in ./.travis/id_rsa.enc -out ~/.ssh/id_rsa -d
