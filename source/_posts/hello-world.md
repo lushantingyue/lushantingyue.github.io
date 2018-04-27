@@ -46,6 +46,6 @@ More info: [Generating](https://hexo.io/docs/generating.html)
 $ hexo deploy
 ```
 
-More info: [部署](https://hexo.io/docs/deployment.html)
-
+More info: 
+[部署](https://hexo.io/docs/deployment.html)
 [NexT主题配置指南](http://theme-next.iissnan.com)
