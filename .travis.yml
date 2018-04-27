@@ -8,6 +8,7 @@ branches:
 env:
  global:
    - BLOG_REF: github.com/lushantingyue/lushantingyue.github.io.git  #设置仓库地址
+   - secure: Tg1fGuLjaAcD1VUyFycSv61LLnE4A3UzJIwhnE15DmNrL58rpH5XPEeFEksKqBB3Y3uC8WC+0sFgxinESo9oPFLk15vTetD9ghGdYlGZK/ICGfUL06Xh/HUtPlBE67JkLotk/E+TFqPJT2FIk0qymqSul0iBn8XMRosvNbghjQ+vf2B3r/h7yx6OiPS4zBeEn1pAYXgIXLfQnAyMY8df5JYC7WPIApxaNR8u399mPGT756X+Uu4w4M8Ky3WWk0sxTXD08ZRiCRzzdi0+1DHgFr/bbsxWbwwGLrIgjbUL/HDJpoNtrnA6w7BFFHn/PscsMFtmsQ7ewRQi/WskrEXhgJ96oVLGhiAPjWFZXkd83S3UpyX2M0MaaEYnPnz16pd+rB/lLCzI6KsRlI9fqvThSgmZzL7Ghnso6WqB5no0mdCctvFMymUhvX/cETGpy6hLRWmrERMKfSOeElLCgCKWAtQPl/DDye7Ir0Dz8iK1dqO33tQQ2nfFUAOvHIYdLiWxeDuyDhirlORAW1okfOjDByGC/td+fsH5Z6KdkFvszgJ67W4i0Z154euVFp2ov7qwJxaJq+tdEk7CzAzk0qnVK6K+GJHH9a4OXyafo3FtvES6pvWCIhe7xDd5zl8dxUErr9USVLHf3X8moZLN5cjqZ/GPwhFBLKdrstmYQ7uZEgw=
 
 cache:
   directories:
@@ -30,15 +31,15 @@ before_script:
 - eval $(ssh-agent)
 - ssh-add ~/.ssh/id_rsa
 - cp .travis/ssh_config ~/.ssh/config
-- sed -i "s/gh_token/${GH_TOKEN}/g" ./_config.yml
+# - sed -i "s/gh_token/${REPO_TOKEN}/g" ./_config.yml
+- sed -i'' "s~git@github.com:lushantingyue/lushantingyue.github.io.git~https://${REPO_TOKEN}:x-oauth-basic@github.com/lushantingyue/lushantingyue.git~" _config.yml
 
 script:
 - hexo clean
 - hexo generate && gulp
-- hexo deploy
 
-# after_script:
-# - hexo deploy
+after_script:
+- hexo deploy
 
 after_success:
 - echo "hexo deploy OK!"

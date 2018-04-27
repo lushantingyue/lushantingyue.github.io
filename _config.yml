@@ -90,10 +90,10 @@ deploy:
   type: git
   repo: 
 	    github: git@github.com:lushantingyue/lushantingyue.github.io.git
-	    coding: git@git.coding.net:lushantingyue/lushantingyue.coding.me.git
+	    # coding: git@git.coding.net:lushantingyue/lushantingyue.coding.me.git
   branch: 
 	    master
-	    coding-pages
+	    # coding-pages
 	    
 ##  https://git.coding.net/lushantingyue/lushantingyue.coding.me.git
 
