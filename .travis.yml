@@ -35,9 +35,10 @@ before_script:
 script:
 - hexo clean
 - hexo generate && gulp
-
-after_script:
 - hexo deploy
+
+# after_script:
+# - hexo deploy
 
 after_success:
 - echo "hexo deploy OK!"
