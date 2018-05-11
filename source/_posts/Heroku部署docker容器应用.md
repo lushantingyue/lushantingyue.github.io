@@ -4,6 +4,7 @@ date: 2018-05-11 15:06:07
 tags: [Heroku, Docker]
 categories: [服务器, 文章翻译, Docker]
 ---
+[原文地址](https://devcenter.heroku.com/articles/container-registry-and-runtime#testing-an-image-locally)
 容器镜像服务(Container Registry)与运行时(Docker部署)
 Heroku容器镜像服务允许你部署你的基于Docker的应用至Heroku平台. 公共运行时和私有空间均支持.
 
