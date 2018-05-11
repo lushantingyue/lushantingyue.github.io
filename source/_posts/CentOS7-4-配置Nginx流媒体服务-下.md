@@ -39,7 +39,7 @@ rtmp {                #RTMP服务
     打开 Wowza网页测试地址(https://www.wowza.com/testplayers)进行拉流,
         填入Server:server_ip:1935 Stream:mylive Application:live 
     也可以使用VLC播放器拉流,但加载延迟较大,这种测试方法不建议使用:
-        打开网络串流,在URL栏输入: rtmp://server_ip:1935/live/mylive 即可,VLC端测试会稍慢,耐心等待其缓冲数十秒即可.
+        打开网络串流,在URL栏输入: rtmp://server_ip:1935/live/mylive 即可,VLC端测试会比较慢,需要耐心等待其缓冲数十秒至数分钟.
     
 #### android端拉流/播放测试
     ijkplayer的使用
@@ -106,7 +106,7 @@ rtmp {                #RTMP服务
 
 
     重启 nginx服务后,
-    在浏览器打开网址 http://server_ip/name.mp4 此访问方式由 location 正则表达式{ } 控制匹配访问路径
+    在浏览器打开网址 http://server_ip/name.mp4 此访问方式由 location 正则表达式{ } 匹配映射至点播文件路径
     在Wowza网页测试地址, 选择rtmp流, 选择VOD, 填入:Server:server_ip:1935 Application:vod_media Stream:filename.mp4
     点击start按钮,即可播放.
 
