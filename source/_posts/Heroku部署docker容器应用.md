@@ -4,27 +4,8 @@ date: 2018-05-11 15:06:07
 tags: [Heroku, Docker]
 categories: [服务器, 文章翻译, Docker]
 ---
-### 容器镜像服务与运行时（Docker部署）
-
-提纲
-
-起步
-登陆容器镜像服务(registry)
-推送一个镜像(镜像组)
-一次性dynos(One-off dynos)
-使用第三方CI/CD平台
-Dockerfile 命令和运行时
-测试本地镜像
-基础镜像栈(Stack images)
-变更部署方法
-使用须知及相关限制
-
-##### Heroku容器镜像服务允许你部署你的基于Docker的应用至Heroku平台. 公共运行时和私有空间均支持.
-
-#### 相关概念
-##### Stack的概念:
-是应用运行的基础环境的Docker镜像，Heroku当前提供三种基础镜像栈: Cedar-14, Heroku-16, and Heroku-18.
-##### dynos：
+容器镜像服务(Container Registry)与运行时(Docker部署)
+Heroku容器镜像服务允许你部署你的基于Docker的应用至Heroku平台. 公共运行时和私有空间均支持.
 
 ##### 起步
 请确认你已经安装好Docker (eg. docker ps) 并且已经登陆Heroku (heroku login).
@@ -57,7 +38,7 @@ Heroku runs a container registry on registry.heroku.com.
 如果你使用的是Heroku CLI, 使用以下语句登陆:
 ```
     $ heroku container:login
-```    
+```
 或者直接使用Docker CLI:
 ```
     $ docker login --username=_ --password=$(heroku auth:token) registry.heroku.com
@@ -65,24 +46,24 @@ Heroku runs a container registry on registry.heroku.com.
 
 ##### 推送一个镜像(镜像组)
 
-###### 构建并推送镜像
+###### 1.构建并推送镜像
 请先确认你的目录里面包含Dockerfile文件，然后运行:
 ```
     $heroku container:push <process-type>
 ```
 
-###### 推送已存在的镜像
+###### 2.推送已存在的镜像
 例如从Docker Hub拉取一个已有镜像，打上Tag便签然后以这样的命名格式语句推送
 ```
     $ docker tag <image> registry.heroku.com/<app>/<process-type>
     $ docker push registry.heroku.com/<app>/<process-type>
-```    
+```
 当镜像成功推送后，使用以下语句查看:
 ```
     $ heroku open -a <app>
 ```
 
-###### 推送多个镜像
+###### 3.推送多个镜像
 以这样的格式重命名你的Dockerfile: Dockerfile.<process-type>:
 ```
     $ ls -R
@@ -105,7 +86,7 @@ Heroku runs a container registry on registry.heroku.com.
     === Pushing web
     === Pushing worker
     === Pushing image
-```    
+```
 这里会构建并推送3个镜像. 如果你想只推送特定的镜像, 可以通过标注 process types:
 ```
     $ heroku container:push web worker --recursive
@@ -122,14 +103,14 @@ Heroku runs a container registry on registry.heroku.com.
 ```
 当没有指定类型时, 默认使用的是 web镜像.
 
-#####　使用第三方 CI/CD平台
+##### 使用第三方 CI/CD平台
 当前还不支持使用Heroku CI服务来测试容器的构建.
 
 如果你在使用第三方的 CI/CD platform, 你可以把镜像推送到容器镜像服务(registry).首先要登陆验证一下信息:
 Registry URL: registry.heroku.com
-Username: your Heroku email address
-Email: your Heroku email address
-Password: your Heroku API key
+Username: 你的Heroku email address
+Email:    你的Heroku email address
+Password: 你的Heroku API key
 关于 构建并推送镜像至 Docker registry的方法，请参阅CI/CD 提供商的相关文档:
 CircleCI
 Bamboo
@@ -138,19 +119,18 @@ Jenkins
 Codeship
 
 ##### Dockerfile命令和(构建期)运行时环境
-当你在推送Docker镜像至容器服务平台，该镜像会即时地被发行至Heroku app. 
-Heroku Docker镜像是用buildpack构建的功能块.Docker镜像以同样的方式运行在dynos上，在同样的约束条件下：
+当你运行推送Docker镜像至容器服务平台，该镜像会即时地被发行至Heroku app. 
+Heroku Docker镜像是用buildpack构建的功能块.Docker镜像以同样的方式运行在dynos上，有以下约束条件：
 
-The web process必须监听HTTP流量端口$PORT,该参数由Heroku指定. Dockerfile中的EXPOSE指令不被采纳, 但是仍然可以在本地测试中使用. 只有HTTP请求是被支持的(HTTPS端口不被支持).
-dynos间的网络连接不被支持.
-临时性的文件系统.
-默认工作目录在 /. 你可以使用 WORKDIR语句设置到别的工作目录.
-ENV 环境参数命令 被支持.
-我们建议使用ENV作为运行时变量(e.g., GEM_PATH)，而heroku配置参数作为认证,以避免敏感的验证信息不被意外暴露在源码里面.
-ENTRYPOINT 可选用. 如果不设置, 使用的是 /bin/sh -c
-CMD 是必须项. 如果CMD没有写, 镜像容器平台会报错
-CMD will always be executed by a shell so that config vars are made available to your process; 
-to execute single binaries or use images without a shell please use ENTRYPOINT
+- The web process必须监听HTTP流量端口$PORT,该参数由Heroku指定. Dockerfile中的EXPOSE指令不被采纳, 但是仍然可以在本地测试中使用. 只有HTTP请求是被支持的(HTTPS端口不被支持).
+- dynos间的网络连接不被支持.
+- 临时性的文件系统.
+- 默认工作目录在 /. 你可以使用 WORKDIR语句设置到别的工作目录.
+- ENV 环境参数命令 被支持.
+- 我们建议使用ENV作为运行时变量(e.g., GEM_PATH)，而heroku配置参数作为认证,以避免敏感的验证信息不被意外暴露在源码里面.
+- ENTRYPOINT 可选用. 如果不设置, 使用的是 /bin/sh -c
+- CMD 是必须项. 如果CMD没有写, 镜像容器平台会报错
+- CMD 总是被shell执行以确保配置参数被进程有效使用;如果想要单独执行脚本或者不使用shell执行镜像请使用entrypoint
 
 ##### 本地环境测试镜像
 关于在本地环境测试镜像这里有一些[最佳实践的例子](https://github.com/heroku/alpinehelloworld/blob/master/Dockerfile).
@@ -168,7 +148,7 @@ to execute single binaries or use images without a shell please use ENTRYPOINT
 ```
     RUN useradd -m myuser
     USER myuser
-```    
+```
 为了确认你的容器是运行在非root用户环境，attach方式进入正在运行的容器 然后运行 whoami命令:
 ```
     $docker exec <container-id> bash
@@ -180,18 +160,27 @@ to execute single binaries or use images without a shell please use ENTRYPOINT
     $ heroku run bash
     $ whoami
     U7729
-```    
+```
+
 ###### 从环境变量里获取端口
 基于测试的目的，我们建议为了让你的Dockerfile或者代码读取到$Port环境变量，例如：
 ```
     CMD gunicorn --bind 0.0.0.0:$PORT wsgi
 ```
+
 当需要从本地运行容器, 请设置环境变量 使用 -e 标志:
-    $ docker run -p 5000:5000 -e PORT=5000 <image-name>
+```
+$ docker run -p 5000:5000 -e PORT=5000 <image-name>
+```
+
 ###### 设置多个环境变量
-When you use heroku locally, you can set config vars in a .env file. When heroku local is run .env is read and each name/value pair is set in the environment. You can use this same .env file when using Docker:
+当在本地使用heroku时, 可以使用.env文件里声明变量. 当heroku本地运行时.env文件会被读取，每个键值对会被设置进环境变量里面. 
+运行Docker时你可以使用相同的.env文件:
+```
 $ docker run -p 5000:5000 --env-file .env <image-name>
-We suggest adding the .env file to your .dockerignore file.
+```
+
+我们建议在.dockerignore文件里忽略.env文件.
 
 ###### 利用 Docker Compose工具构建多容器复合应用
 如果你已经创建好了多容器复合应用， 
@@ -226,3 +215,7 @@ As layer count/image size grows, so will dyno boot time.
 不支持Pipeline promotions.
 不支持Release phase.
 不支持The commands listed here.    
+
+##### 相关概念
+Stack的概念: 是应用运行的基础环境的Docker镜像，Heroku当前提供三种基础镜像栈: Cedar-14, Heroku-16, and Heroku-18.
+dynos: 
