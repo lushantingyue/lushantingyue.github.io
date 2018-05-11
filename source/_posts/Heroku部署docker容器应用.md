@@ -218,4 +218,4 @@ As layer count/image size grows, so will dyno boot time.
 
 ##### 相关概念
 Stack的概念: 是应用运行的基础环境的Docker镜像，Heroku当前提供三种基础镜像栈: Cedar-14, Heroku-16, and Heroku-18.
-dynos: 所有的Heroku应用运行在一个轻量级的Linux容器组成的集群上面,这个集群称为dynos,扩展性灵活.
+dynos: 所有的Heroku应用运行在一个轻量级的Linux容器组成的集群上面,这个集群称为dynos,扩展灵活.
